@@ -31,7 +31,8 @@ shinyUI(fluidPage(
                    value = 30)
     ),
     
-    # Show a plot of the generated distribution
+    # Show map
+
     mainPanel(
       leafletOutput("mymap")
     )

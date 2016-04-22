@@ -37,55 +37,58 @@ install_github("ateucher/rmapshaper")
 
 ##load shape file 
 
-SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/QLD.shape files",
+SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/Qld.shape files",
                layer = "SLA_QLD_06", verbose = FALSE)
-SLA <- as.data.frame(SLA)
 
-SLA <- fortify(SLA)
+#create dataframe of SLA
+data.frame(SLA)
 
-##add est.SIR & CI bounds to shape file 
+#load file with estimates 
 data <- read.csv("/Users/robertj9/L.Projects/L.Uncert.spatialmap/est.datafile.10feb2016.csv")
 
-  
-##add estimate and CI values to shape file 
 
+#add SIR values to data.frame? 
 SLA$estimate <- data$est
+
+
+
+##SLA$estimate <- data$est
 SLA$ci.u <- data$ci.u
 SLA$ci.l <- data$ci.l
 SLA$ci.length <- data$ci.length
 
 #create legend labels as character vector and add to Shape File 
-ata <- SLA %>%
+ata %>%
   mutate(Risk = ifelse(estimate < 0.7,
-        yes = "Very Low",
-        no = ifelse(estimate < 0.9,
+      yes = "Very Low",
+      no = ifelse(estimate < 0.9,
              yes = "Low",
-             no = ifelse(estimate < 1.1, 
-                 yes = "Average", 
-                 no = ifelse(estimate <1.3, 
-                     yes = "High", 
-                     no = ifelse(estimate >1.31, 
-                       yes = "Very High",
-                       no = "na"))))))        
+            no = ifelse(estimate < 1.1, 
+                       yes = "Average", 
+                       no = ifelse(estimate <1.3, 
+                                yes = "High", 
+                                no = ifelse(estimate >1.31, 
+                                           yes = "Very High",
+                                           no = "Very High")))))) 
 
-SLA$Risk.label <- ata$Risk
 
-#create a colour palette 
-pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$SIR, bins = c(0.0, 0.7, 0.8, 0.9, 1.1, 1.2, 1.3, 2.06), pretty = FALSE) 
+#create a colour palette _______________________________________
+pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0, 0.7, 0.8, 0.9, 1.1, 1.2, 1.3, 2.06), pretty = FALSE) 
 
-legend.lab <- c("Very High"," ", "High"," ",  "Average", " ",  "Low", " ", "Very Low")
 
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-   
-  output$mymap <- renderLeaflet({
-      leaflet(SLA) %>%
-      addPolygons( 
-        stroke = FALSE, fillOpacity = 1, smoothFactor = 0.2,
-        color = ~pal1(SLA$SIR)
-      ) %>%
-      addLegend("bottomleft", values = SLA$SIR, title = "Lung Cancer Risk", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
-    
-  })
-  
-})
+
+pal2 <- colorQuantile("Blues", SLA$estimate, n=5)
+
+
+#_____________________
+#draw map 
+
+leaflet(SLA) %>%
+  addPolygons( 
+    stroke = FALSE, fillOpacity = 1, smoothFactor = 0.2,
+    color = ~pal1(SLA$estimate)
+  ) %>%
+  addLegend("bottomleft", values = SLA$estimate, title = "Lung Cancer Risk", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
+
+
+
