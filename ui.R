@@ -19,7 +19,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Queensland Cancer Atlas"),
+  titlePanel("Spatial Map"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(

@@ -28,11 +28,11 @@ library(foreign)
 ##load shape file 
 
 
-SLA <- readOGR(dsn= "C:/Users/robertj9/GitHub/Uncert.spatialmap/Atlas1.27jan16/Qld.shape files",
+SLA <- readOGR(dsn= "__insert shape file location__",
                layer = "SLA_QLD_06", verbose = FALSE)
 
 ##add est.SIR & CI bounds to shape file 
-data <- read.csv("C:/Users/robertj9/RDirectory/Catlas1.27jan16/est.SIR.datafile.10feb2016.csv")
+data <- read.csv("C:/Users/___insert data file location")
 
   
 ##add SIR and CI values to shape file 
