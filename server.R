@@ -6,53 +6,65 @@
 # 
 #    http://shiny.rstudio.com/
 #
-library(shiny)
-#install rgdl & Leaflet library for polygons 
-install.packages("rgdal")
-library(rgdal)
-install.packages("leaflet")
-library(leaflet)
-install.packages("dplyr")
-library(dplyr)
-install.packages("colorRamps")
-library(colorRamps)
-install.packages("graphics")
-library(graphics)
-install.packages("RColorBrewer")
-library(RColorBrewer)
-install.packages("foreign")
-library(foreign)
+# library(shiny)
+# #install rgdl & Leaflet library for polygons 
+# #install.packages("rgdal")
+# library(rgdal)
+# #install.packages("leaflet")
+# library(leaflet)
+# #install.packages("dplyr")
+# library(dplyr)
+# #install.packages("colorRamps")
+# library(colorRamps)
+# #install.packages("graphics")
+# library(graphics)
+# #install.packages("RColorBrewer")
+# library(RColorBrewer)
+# #install.packages("foreign")
+# library(foreign)
+# #install.packages("maptools")
+# library(maptools)
+# #install.packages("ggplot2")
+# library(ggplot2)
 
+#install github packages
+
+install.packages("devtools")
+library("devtools")
+
+install_github("ateucher/rmapshaper")
 
 
 ##load shape file 
 
-
-SLA <- readOGR(dsn= "__insert shape file location__",
+SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/QLD.shape files",
                layer = "SLA_QLD_06", verbose = FALSE)
+SLA <- as.data.frame(SLA)
+
+SLA <- fortify(SLA)
 
 ##add est.SIR & CI bounds to shape file 
-data <- read.csv("C:/Users/___insert data file location")
+data <- read.csv("/Users/robertj9/L.Projects/L.Uncert.spatialmap/est.datafile.10feb2016.csv")
 
   
-##add SIR and CI values to shape file 
+##add estimate and CI values to shape file 
 
-SLA$SIR <- data$est.SIR
+SLA$estimate <- data$est
 SLA$ci.u <- data$ci.u
 SLA$ci.l <- data$ci.l
 SLA$ci.length <- data$ci.length
 
 #create legend labels as character vector and add to Shape File 
-ata <- data %>%
-  mutate(Risk = ifelse(est.SIR < 0.7,
+ata <- SLA %>%
+  mutate(Risk = ifelse(estimate < 0.7,
         yes = "Very Low",
-        no = ifelse(est.SIR < 0.9,
+        no = ifelse(estimate < 0.9,
              yes = "Low",
-             no = ifelse(est.SIR < 1.1, 
+             no = ifelse(estimate < 1.1, 
                  yes = "Average", 
-                 no = ifelse(est.SIR <1.3, 
+                 no = ifelse(estimate <1.3, 
                      yes = "High", 
-                     no = ifelse(est.SIR >1.31, 
+                     no = ifelse(estimate >1.31, 
                        yes = "Very High",
                        no = "na"))))))        
 
