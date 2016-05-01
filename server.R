@@ -40,15 +40,29 @@ SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/Qld.shape fi
 data <- read.csv("/Users/robertj9/L.Projects/L.Uncert.spatialmap/est.datafile.10feb2016.csv")
 
 
-#add SIR values to data.frame? 
+#add SIR values to data file? 
 SLA$estimate <- data$est
 
+## add risk to data file  - this isn't necessary because when using the palette colorbin, x must be numeric and cannot be character. Althought I will leave it in in case I want to use a categorical palett in the future. A categorical palette may also be easier for defining the risk cut offs, rather than having to specify the bin cut offs. 
 
+data <- data %>%
+  mutate(Risk = ifelse(est < 0.7,
+     yes = "Very Low",
+     no = ifelse(est < 0.9,
+                 yes = "Low",
+                 no = ifelse(est < 1.1, 
+                       yes = "Average", 
+                       no = ifelse(est <1.3, 
+                                   yes = "High", 
+                                   no = ifelse(est >1.31, 
+                                             yes = "Very High",
+                                             no = "Very High")))))) 
 
 ##SLA$estimate <- data$est
 SLA$ci.u <- data$ci.u
 SLA$ci.l <- data$ci.l
 SLA$ci.length <- data$ci.length
+SLA$Risk <- data$Risk
 
 
 #Legend labels 
