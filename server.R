@@ -6,33 +6,28 @@
 # 
 #    http://shiny.rstudio.com/
 #
-# library(shiny)
+library(shiny)
 # #install rgdl & Leaflet library for polygons 
 # #install.packages("rgdal")
-# library(rgdal)
+library(rgdal)
 # #install.packages("leaflet")
-# library(leaflet)
+library(leaflet)
 # #install.packages("dplyr")
-# library(dplyr)
+library(dplyr)
 # #install.packages("colorRamps")
-# library(colorRamps)
+library(colorRamps)
 # #install.packages("graphics")
-# library(graphics)
+library(graphics)
 # #install.packages("RColorBrewer")
-# library(RColorBrewer)
+library(RColorBrewer)
 # #install.packages("foreign")
-# library(foreign)
+library(foreign)
 # #install.packages("maptools")
-# library(maptools)
+library(maptools)
 # #install.packages("ggplot2")
-# library(ggplot2)
+library(ggplot2)
 
-#install github packages
 
-install.packages("devtools")
-library("devtools")
-
-install_github("ateucher/rmapshaper")
 
 
 ##load shape file 
@@ -40,8 +35,6 @@ install_github("ateucher/rmapshaper")
 SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/Qld.shape files",
                layer = "SLA_QLD_06", verbose = FALSE)
 
-#create dataframe of SLA
-data.frame(SLA)
 
 #load file with estimates 
 data <- read.csv("/Users/robertj9/L.Projects/L.Uncert.spatialmap/est.datafile.10feb2016.csv")
@@ -57,20 +50,9 @@ SLA$ci.u <- data$ci.u
 SLA$ci.l <- data$ci.l
 SLA$ci.length <- data$ci.length
 
-#create legend labels as character vector and add to Shape File 
-ata %>%
-  mutate(Risk = ifelse(estimate < 0.7,
-      yes = "Very Low",
-      no = ifelse(estimate < 0.9,
-             yes = "Low",
-            no = ifelse(estimate < 1.1, 
-                       yes = "Average", 
-                       no = ifelse(estimate <1.3, 
-                                yes = "High", 
-                                no = ifelse(estimate >1.31, 
-                                           yes = "Very High",
-                                           no = "Very High")))))) 
 
+#Legend labels 
+legend.lab <- c("Very High"," ", "High"," ",  "Average", " ",  "Low", " ", "Very Low")
 
 #create a colour palette _______________________________________
 pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0, 0.7, 0.8, 0.9, 1.1, 1.2, 1.3, 2.06), pretty = FALSE) 
@@ -88,7 +70,7 @@ leaflet(SLA) %>%
     stroke = FALSE, fillOpacity = 1, smoothFactor = 0.2,
     color = ~pal1(SLA$estimate)
   ) %>%
-  addLegend("bottomleft", values = SLA$estimate, title = "Lung Cancer Risk", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
+  addLegend("bottomleft", values = SLA$estimate, title = "Spatial Health Map", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
 
 
 

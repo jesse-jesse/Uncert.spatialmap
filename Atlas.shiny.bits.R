@@ -42,8 +42,10 @@ mydata <- read.dta(file.choose())
 ##add attribute to shape file 
 SLA$new.att <- 1:nrow(SLA)
 
-#create dataframe of SLA
+#create dataframe of SLA - was not necessary to create data frame for this project. Leaflet requires a shape file. 
 data.frame(SLA)
+data.frame(SLA)
+SLA.df <- as(SLA, "data.frame")
 
 
 #load file with estimates 
@@ -57,8 +59,6 @@ sir.value <- (select(data, SIR))
 SLA$sir <- sir.value
 
 #create character vector from est.SIR
-
-
 
 mutate(data, RISk = ifelse(est.SIR %in% 0.0:0.69, "Very Low", 
            ifelse(est.SIR %in% 0.7:0.89, 
@@ -79,7 +79,48 @@ ata %>%
                     yes = "High", 
                     no = ifelse(est.SIR >1.31, 
                          yes = "Very High",
-                         no = "na"))))))        
+                         no = "na"))))))
+
+
+##__- trying to fix this mutate function
+
+SLA.df <- as.data.frame(SLA)
+
+SLA.df <- fortify(SLA)
+
+
+ata <- SLA.df %>%
+  mutate(Risk = ifelse(estimate < 0.7,
+               yes = "Very Low",
+               no = ifelse(estimate < 0.9,
+                     yes = "Very Low",
+                     no = ifelse(estimate < 0.9,
+                             yes = "Low",
+                             no = ifelse(estimate < 1.1, 
+                                   yes = "Average", 
+                                   no = ifelse(estimate <1.3, 
+                                         yes = "High", 
+                                         no = ifelse(estimate >1.31, 
+                                             yes = "Very High",
+                                           no = "na")))))))        
+
+SLA$Risk.label <- ata$Risk
+         
+#_____This was actually not necessary, I defined the colours through the bins within the palette .. didn't need this extra label at all. 
+ata <- SLA %>%
+  mutate(Risk = ifelse(estimate < 0.7,
+                       yes = "Very Low",
+                       no = ifelse(estimate < 0.9,
+                                   yes = "Low",
+                                   no = ifelse(estimate < 1.1, 
+                                               yes = "Average", 
+                                               no = ifelse(estimate <1.3, 
+                                                           yes = "High", 
+                                                           no = ifelse(estimate >1.31, 
+                                                                       yes = "Very High",
+                                                                       no = "Very High")))))) 
+
+#_______
 
 
 #create a colour palette _______________________________________
@@ -139,3 +180,5 @@ shinyUI(fluidPage(
     )
   )
 ))
+
+
