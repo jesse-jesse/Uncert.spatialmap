@@ -8,7 +8,7 @@
 #
 #library(shiny)
 # #install rgdl & Leaflet library for polygons 
-install.packages("magrittr")
+#install.packages("magrittr")
 library(magrittr)
 #install.packages("rgdal")
 library(rgdal)
@@ -75,7 +75,7 @@ pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0
 
 
 
-pal2 <- colorQuantile("Blues", SLA$estimate, n=5)
+#pal2 <- colorQuantile("Blues", SLA$estimate, n=5)
 
 
 #_____________________
@@ -89,4 +89,4 @@ my.map <- leaflet(SLA) %>%
   addLegend("bottomleft", values = SLA$estimate, title = "Spatial Health Map", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
 
 
-my.map
+

@@ -10,34 +10,34 @@ library(leaflet)
 
 ###This runs when I highlight and press run. But not when I press the "run app" button above. 
 
-# app <- shinyApp(
-#   ui <- fluidPage(leafletOutput('my.map')
-# ),
-#   server <- function(input, output) {
-#     map <- my.map
-#     output$my.map <- renderLeaflet(map)
-#   }
-# )
-# 
-# if (interactive()) print(app)
-
-
-
- 
- 
-ui <- fluidPage(
-   leafletOutput("map")
+ app <- shinyApp(
+   ui <- fluidPage(leafletOutput('my.map')
+ ),
+   server <- function(input, output, session) {
+     map <- my.map
+     output$my.map <- renderLeaflet(map)
+   }
  )
+
+if (interactive()) print(app)
+
+
+
  
- server <- function(input, output, session)
-   
-   output$my.map <- renderLeaflet({
-     leaflet()
-      
-   })
- 
- 
- shinyApp(ui, server)
+
+#  ui <- fluidPage(
+#     leafletOutput("my.map")
+#   )
+# 
+#   server <- function(input, output, session){
+# 
+#     output$my.map <- renderLeaflet(my.map)
+#       
+#     }
+#   )
+# 
+
+#shinyApp(ui, server)
  
  
 # 
