@@ -6,7 +6,7 @@
 # 
 #    http://shiny.rstudio.com/
 #
-#library(shiny)
+library(shiny)
 # #install rgdl & Leaflet library for polygons 
 #install.packages("magrittr")
 library(magrittr)
@@ -77,16 +77,28 @@ pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0
 
 #pal2 <- colorQuantile("Blues", SLA$estimate, n=5)
 
-
-#_____________________
-#draw map 
-
+#Draw Map 
 my.map <- leaflet(SLA) %>%
   addPolygons( 
     stroke = FALSE, fillOpacity = 1, smoothFactor = 0.2,
     color = ~pal1(SLA$estimate)
   ) %>%
   addLegend("bottomleft", values = SLA$estimate, title = "Spatial Health Map", colors= c( "#993399", "#B970B6", "#D6A9D3", "#F2E2F0", "#FFFFFF","#FBF7E1", "#EFE8A4", "#E0DA66", "#CCCC00" ), labels = legend.lab, opacity = 1)
+
+my.map
+
+
+#----
+
+shinyServer(
+    function(input, output) {
+      
+     my.map = my.map
+  output$my.map <- renderLeaflet(my.map)
+  
+    }
+)
+
 
 
 

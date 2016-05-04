@@ -5,37 +5,25 @@
 # Find out more about building applications with Shiny here:
 # 
 #    http://shiny.rstudio.com/
-library(shiny)
-library(leaflet)
+
 
 ###This runs when I highlight and press run. But not when I press the "run app" button above. 
 
- app <- shinyApp(
-   ui <- fluidPage(leafletOutput('my.map')
- ),
-   server <- function(input, output, session) {
-     map <- my.map
-     output$my.map <- renderLeaflet(map)
-   }
- )
-
-if (interactive()) print(app)
 
 
 
+
+#define UI
+
+shinyUI(fluidPage(
+    #Application Title 
+    titlePanel("Spatial Map"),
+    
+    #insert sidebar later
+    
+     leafletOutput("my.map")
+   ))
  
-
-#  ui <- fluidPage(
-#     leafletOutput("my.map")
-#   )
-# 
-#   server <- function(input, output, session){
-# 
-#     output$my.map <- renderLeaflet(my.map)
-#       
-#     }
-#   )
-# 
 
 #shinyApp(ui, server)
  
