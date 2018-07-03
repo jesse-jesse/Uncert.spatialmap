@@ -26,7 +26,7 @@ library(RColorBrewer)
 library(foreign)
 # #install.packages("maptools")
 library(maptools)
-# #install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
 
 
@@ -34,12 +34,12 @@ library(ggplot2)
 
 ##load shape file 
 
-SLA <- readOGR(dsn= "/Users/robertj9/L.Projects/L.Uncert.spatialmap/Qld.shape files",
+SLA <- readOGR(dsn= "/Users/robertj9/L.GitHub/L.uncert_spatial_map/Qld.shape_files",
                layer = "SLA_QLD_06", verbose = FALSE)
 
 
 #load file with estimates 
-data <- read.csv("/Users/robertj9/L.Projects/L.Uncert.spatialmap/est.datafile.10feb2016.csv")
+data <- read.csv("/Users/robertj9/L.Github/L.uncert_spatial_map/est.datafile.10feb2016.csv")
 
 
 #add SIR values to data file? 
