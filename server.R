@@ -12,19 +12,19 @@ library(shiny)
 library(magrittr)
 #install.packages("rgdal")
 library(rgdal)
-# #install.packages("leaflet")
+#install.packages("leaflet")
 library(leaflet)
-# #install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
-# #install.packages("colorRamps")
+#install.packages("colorRamps")
 library(colorRamps)
-# #install.packages("graphics")
+#install.packages("graphics")
 library(graphics)
-# #install.packages("RColorBrewer")
+#install.packages("RColorBrewer")
 library(RColorBrewer)
-# #install.packages("foreign")
+#install.packages("foreign")
 library(foreign)
-# #install.packages("maptools")
+#install.packages("maptools")
 library(maptools)
 #install.packages("ggplot2")
 library(ggplot2)
@@ -48,9 +48,9 @@ SLA$estimate <- data$est
 ## add risk to data file  - this isn't necessary because when using the palette colorbin, x must be numeric and cannot be character. Althought I will leave it in in case I want to use a categorical palett in the future. A categorical palette may also be easier for defining the risk cut offs, rather than having to specify the bin cut offs. 
 
 data <- data %>%
-  mutate(Risk = ifelse(est < 0.7,
+  mutate(Risk = ifelse(est < 0.769,
      yes = "Very Low",
-     no = ifelse(est < 0.9,
+     no = ifelse(est < 0.909,
                  yes = "Low",
                  no = ifelse(est < 1.1, 
                        yes = "Average", 
@@ -71,7 +71,7 @@ SLA$Risk <- data$Risk
 legend.lab <- c("Very High"," ", "High"," ",  "Average", " ",  "Low", " ", "Very Low")
 
 #create a colour palette _______________________________________
-pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0, 0.7, 0.8, 0.9, 1.1, 1.2, 1.3, 2.06), pretty = FALSE) 
+pal1 <- colorBin( c("#CCCC00","#FFFFFF", "#993399"), SLA$estimate, bins = c( 0.0, 0.769, 0.839, 0.909, 1.1, 1.2, 1.3, 2.06), pretty = FALSE) 
 
 
 
